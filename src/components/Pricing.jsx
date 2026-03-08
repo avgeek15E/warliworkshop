@@ -29,7 +29,7 @@ function Pricing() {
 
           {/* REGISTER BUTTON */}
           <Link to="/register" className="hero-button">
-            Register Now
+            Register Now!!
           </Link>
         </div>
       </div>
