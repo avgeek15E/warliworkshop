@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import CourseContent from "../components/CourseContent";
 import SectionDivider from "../components/SectionDivider";
 import StudentGallery from "../components/StudentGallrey";
+import FAQs from "../components/FAQ";
 
 function Home() {
   return (
@@ -32,6 +33,10 @@ function Home() {
       <SectionDivider />
 
       <Pricing />
+
+      <SectionDivider />
+
+      <FAQs />
 
       <SectionDivider />
 
