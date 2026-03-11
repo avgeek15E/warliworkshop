@@ -22,7 +22,7 @@ function RegisterForm() {
     e.preventDefault();
 
     const options = {
-      key: "YOUR_RAZORPAY_KEY_ID", // replace with your Razorpay key
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
 
       amount: 9900, // ₹99 in paise
       currency: "INR",

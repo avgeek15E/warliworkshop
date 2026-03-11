@@ -14,17 +14,16 @@ function Hero() {
 
       <p className="hero-subtitle">Learn Warli Art Online आता मराठीतून !!</p>
 
-      <p className="hero-note">Watch the video before you register</p>
-
       {/* Content */}
       <div className="hero-content">
         {/* Video */}
         <div className="hero-video">
           <video
             src="/dummy2.mp4"
-            autoPlay
-            muted
+            poster="/bg.jpg"
+            controls
             playsInline
+            preload="metadata"
             onEnded={(e) => e.target.pause()}
           />
         </div>
@@ -38,11 +37,13 @@ function Hero() {
 
           <div className="hero-info-card">
             <p className="card-label">⏰ Time</p>
-            <p className="card-value">6:00 PM – 8:00 PM</p>
+            <p className="card-value">5:00 PM - 8:00 PM</p>
           </div>
 
           <div className="hero-info-card highlight-card">
-            <p className="card-value">Understand minute details and tricks</p>
+            <p className="card-value">
+              Warli Art step by step शिका आणि स्वतःची सुंदर artwork तयार करा!!
+            </p>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 function StudentGallery() {
-  const sliderRef = useRef(null);
   const [paused, setPaused] = useState(false);
 
   const paintings = [
@@ -12,48 +11,28 @@ function StudentGallery() {
     "/students/5.png",
   ];
 
-  /* duplicate images for infinite loop */
+  /* duplicate images for infinite effect */
   const infinitePaintings = [...paintings, ...paintings];
-
-  useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-
-    const scroll = () => {
-      if (paused) return;
-
-      slider.scrollLeft += 1;
-
-      /* reset when halfway */
-      if (slider.scrollLeft >= slider.scrollWidth / 2) {
-        slider.scrollLeft = 0;
-      }
-    };
-
-    const interval = setInterval(scroll, 20);
-
-    return () => clearInterval(interval);
-  }, [paused]);
 
   return (
     <section className="student-gallery">
       <h2 className="gallery-title">Students' Artwork</h2>
 
       <div
-        className="gallery-slider"
-        ref={sliderRef}
+        className="gallery-wrapper"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        {infinitePaintings.map((img, index) => (
-          <div className="gallery-card" key={index}>
-            <img src={img} alt="Student artwork" />
-          </div>
-        ))}
+        <div className={`gallery-track ${paused ? "paused" : ""}`}>
+          {infinitePaintings.map((img, index) => (
+            <div className="gallery-card" key={index}>
+              <img src={img} alt="Student artwork" />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 export default StudentGallery;
-
