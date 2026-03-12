@@ -24,7 +24,7 @@ function RegisterForm() {
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
 
-      amount: 9900, // ₹99 in paise
+      amount: 9900,
       currency: "INR",
 
       name: "Rangdhara",
