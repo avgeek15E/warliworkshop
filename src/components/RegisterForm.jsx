@@ -70,9 +70,9 @@ function RegisterForm() {
         />
 
         <input
-          type="text"
-          name="city"
-          placeholder="City"
+          type="email"
+          name="email"
+          placeholder="Email ID"
           required
           onChange={handleChange}
         />
@@ -86,9 +86,9 @@ function RegisterForm() {
         />
 
         <input
-          type="email"
-          name="email"
-          placeholder="Email ID"
+          type="text"
+          name="city"
+          placeholder="City"
           required
           onChange={handleChange}
         />

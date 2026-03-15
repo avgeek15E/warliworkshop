@@ -20,7 +20,7 @@ function Hero() {
         <div className="hero-video">
           <video
             src="/dummy2.mp4"
-            poster="/bg.jpg"
+            poster="/students/4.png"
             controls
             playsInline
             preload="metadata"

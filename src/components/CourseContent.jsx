@@ -27,12 +27,12 @@ function CourseContent() {
         </div>
 
         <div className="course-card card-5">
-          <img src="/topics/borders.png" alt="Borders" />
+          <img src="/topics/borders.jpeg" alt="Borders" />
           <h3>Warli Borders</h3>
         </div>
 
         <div className="course-card card-8">
-          <img src="/topics/artwork.jpg" alt="Artwork" />
+          <img src="/topics/artwork.jpeg" alt="Artwork" />
           <h3>Final Artwork</h3>
         </div>
       </div>
