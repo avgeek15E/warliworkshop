@@ -5,9 +5,9 @@ function FAQs() {
 
   const faqs = [
     {
-      question: "Do I need prior drawing experience?",
+      question: "Can I start even if I don't have confidence in drawing?",
       answer:
-        "No problem at all! This workshop is beginner-friendly. आपण अगदी scratch पासून सुरुवात करणार आहोत, त्यामुळे आधी painting चा experience नसला तरी चालेल.",
+        "Absolutely! This course is specially designed for beginners to build your confidence step by step.",
     },
     {
       question: "What materials will I need for the workshop?",
@@ -22,12 +22,17 @@ function FAQs() {
     {
       question: "How will I join the workshop?",
       answer:
-        "You will receive the Google Meet or Zoom link via email before the workshop starts.",
+        "You will receive the Google Meet or Zoom link via whatsapp group before the workshop starts.",
     },
     {
       question: "Is this class suitable for kids or only adults?",
       answer:
         "This class is suitable for both kids and adults. Anyone who is interested in art can join.",
+    },
+    {
+      question: "Will I get support if I have doubts?",
+      answer:
+        "Yes, you will get full guidance and support during your learning journey.",
     },
   ];
 

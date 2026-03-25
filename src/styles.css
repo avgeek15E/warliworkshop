@@ -445,8 +445,11 @@ button,
 .course-grid {
   max-width: 1000px;
   margin: auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* centers last row */
+
   gap: 24px;
   margin-bottom: 40px;
 }
@@ -454,11 +457,17 @@ button,
 /* CARD */
 
 .course-card {
+  flex: 1 1 280px;   /* grows nicely */
+  max-width: 340px;
+
   padding: 26px 20px;
   border-radius: 20px;
+
   box-shadow: 0 18px 40px rgba(0,0,0,0.12);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
   text-align: center;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .course-card:hover {
@@ -539,6 +548,20 @@ button,
 
   .course-title {
     font-size: 34px;
+  }
+}
+
+@media (max-width: 900px) {
+  .course-card {
+    flex: 1 1 45%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 600px) {
+  .course-card {
+    flex: 1 1 100%;
+    max-width: 90%;
   }
 }
 

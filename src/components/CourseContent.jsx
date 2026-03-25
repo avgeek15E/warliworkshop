@@ -50,12 +50,6 @@ function CourseContent() {
             Warli artwork that tells your unique story.
           </p>
         </div>
-
-        <div className="course-card card-8">
-          <img src="/topics/artwork.jpeg" alt="Artwork" />
-          <h3>Final Artwork</h3>
-          <p className="course-desc">Lorem ipsum dolor sit amet consectetur.</p>
-        </div>
       </div>
 
       <Link to="/register" className="hero-button">
