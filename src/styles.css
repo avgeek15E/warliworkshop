@@ -114,9 +114,6 @@ button,
 
 }
 
-/* ===============================
-   HERO SECTION
-================================ */
 
 /* ===============================
    HERO SECTION
@@ -489,6 +486,15 @@ button,
   margin-bottom: 8px;
 }
 
+/* DESCRIPTION TEXT */
+
+.course-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5b3a29;
+  margin-top: 6px;
+}
+
 /* ===============================
    CARD COLORS
 ================================ */
@@ -657,9 +663,19 @@ button,
 
 }
 
+.gallery-track {
+  animation: gallery-scroll 18s linear infinite;
+}
+
 /* ===============================
    RESPONSIVE
 ================================ */
+
+@media (max-width: 768px) {
+  .gallery-track {
+    animation: gallery-scroll 12s linear infinite;
+  }
+}
 
 @media (max-width:1024px){
 
@@ -713,6 +729,8 @@ button,
   }
 
 }
+
+
 
 
 /* ===============================

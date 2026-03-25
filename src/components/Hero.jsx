@@ -32,12 +32,12 @@ function Hero() {
         <div className="hero-cards">
           <div className="hero-info-card">
             <p className="card-label">📅 Date</p>
-            <p className="card-value">22 March 2026</p>
+            <p className="card-value">Comming Soon</p>
           </div>
 
           <div className="hero-info-card">
             <p className="card-label">⏰ Time</p>
-            <p className="card-value">5:00 PM - 8:00 PM</p>
+            <p className="card-value">Comming Soon</p>
           </div>
 
           <div className="hero-info-card highlight-card">

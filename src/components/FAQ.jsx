@@ -24,6 +24,11 @@ function FAQs() {
       answer:
         "You will receive the Google Meet or Zoom link via email before the workshop starts.",
     },
+    {
+      question: "Is this class suitable for kids or only adults?",
+      answer:
+        "This class is suitable for both kids and adults. Anyone who is interested in art can join.",
+    },
   ];
 
   const toggleFAQ = (index) => {
