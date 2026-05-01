@@ -3,15 +3,19 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
-const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-app.use(cors());
+/* ===============================
+   MIDDLEWARE
+================================ */
+
+// IMPORTANT: raw body for webhook
+app.use("/webhook", bodyParser.raw({ type: "*/*" }));
+
+// normal json for other routes
 app.use(bodyParser.json());
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.use(cors());
 
 /* ===============================
    EMAIL CONFIG
@@ -33,65 +37,78 @@ app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
 
+app.get("/test-mail", async (req, res) => {
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: "Test Email ✅",
+      text: "Email working!",
+    });
+
+    res.send("Test email sent ✅");
+  } catch (err) {
+    console.log(err);
+    res.send("Email failed ❌");
+  }
+});
+
 /* ===============================
    RAZORPAY WEBHOOK
 ================================ */
 
 app.post("/webhook", async (req, res) => {
-  const event = req.body;
+  try {
+    const body = JSON.parse(req.body.toString());
 
-  console.log("Webhook received:", event.event);
+    console.log("🔥 WEBHOOK HIT:", body.event);
 
-  if (event.event === "payment.captured") {
-    const payment = event.payload.payment.entity;
+    if (body.event === "payment.captured") {
+      const payment = body.payload.payment.entity;
 
-    const email = payment.email;
-    const contact = payment.contact;
+      console.log("FULL PAYMENT:", payment);
 
-    try {
+      const email = payment.email || process.env.EMAIL_USER;
+
       await transporter.sendMail({
-        from: "YOUR_EMAIL@gmail.com",
+        from: process.env.EMAIL_USER,
         to: email,
         subject: "Warli Workshop Access 🎨",
         html: `
           <h2>Welcome to Warli Workshop 🎨</h2>
 
-          <p>Hi,</p>
+          <p>Thank you for registering!</p>
 
-          <p>Thank you for registering for the workshop.</p>
+          <p><strong>Date:</strong> 22 March</p>
+          <p><strong>Time:</strong> 6 PM - 8 PM</p>
 
-          <h3>Here are your details:</h3>
+          <p>Check materials below:</p>
 
-          <ul>
-            <li>📅 Date: 22 March</li>
-            <li>⏰ Time: 6 PM - 8 PM</li>
-          </ul>
-
-          <h3>Materials:</h3>
           <ul>
             <li>PDF Guide: [Add link]</li>
             <li>Reference Images: [Add link]</li>
           </ul>
 
-          <p>Join 10 mins before session.</p>
-
-          <p>See you there! 😊</p>
+          <p>Join 10 mins early 😊</p>
         `,
       });
 
-      console.log("Email sent to:", email);
-    } catch (err) {
-      console.log("Email error:", err);
+      console.log("✅ Email sent to:", email);
     }
-  }
 
-  res.status(200).send("OK");
+    res.status(200).send("OK");
+  } catch (err) {
+    console.log("❌ WEBHOOK ERROR:", err);
+    res.status(500).send("Error");
+  }
 });
 
 /* ===============================
    START SERVER
 ================================ */
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
