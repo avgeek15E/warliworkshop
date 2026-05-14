@@ -1,13 +1,30 @@
 function ThankYou() {
   return (
     <section className="thankyou-page">
-      <h1>Thank You for Registering!</h1>
+      <div className="thankyou-card">
+        {/* Success Icon */}
+        <div className="success-icon">🎉</div>
 
-      <p>Your payment has been received successfully.</p>
+        {/* Heading */}
+        <h1 className="thankyou-title">Thank You for Registering!</h1>
 
-      <p>A confirmation email has been sent to you.</p>
+        {/* Message */}
+        <p className="thankyou-text">
+          Your registration has been completed successfully.
+        </p>
 
-      <p>We will send the workshop joining link soon.</p>
+        <p className="thankyou-text">
+          You will receive an email from our end with all the workshop details.
+        </p>
+
+        <p className="thankyou-highlight">
+          Please check your inbox and don’t forget to join the WhatsApp group
+          link mentioned in the email 📩
+        </p>
+
+        {/* Extra Note */}
+        <div className="thankyou-note">See you in the workshop 🎨</div>
+      </div>
     </section>
   );
 }
