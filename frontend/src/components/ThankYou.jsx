@@ -18,7 +18,7 @@ function ThankYou() {
         </p>
 
         <p className="thankyou-highlight">
-          Please check your inbox and don’t forget to join the WhatsApp group
+          Please check your inbox and don't forget to join the WhatsApp group
           link mentioned in the email 📩
         </p>
 
