@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
@@ -10,11 +11,12 @@ const app = express();
    MIDDLEWARE
 ================================ */
 
-// IMPORTANT: raw body for webhook
+// IMPORTANT for Razorpay webhook
 app.use("/webhook", bodyParser.raw({ type: "*/*" }));
 
-// normal json for other routes
+// normal json parsing
 app.use(bodyParser.json());
+
 app.use(cors());
 
 /* ===============================
@@ -30,12 +32,24 @@ const transporter = nodemailer.createTransport({
 });
 
 /* ===============================
-   TEST ROUTE
+   ROOT ROUTE
 ================================ */
 
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
+
+/* ===============================
+   KEEP SERVER AWAKE
+================================ */
+
+app.get("/ping", (req, res) => {
+  res.send("awake");
+});
+
+/* ===============================
+   TEST MAIL ROUTE
+================================ */
 
 app.get("/test-mail", async (req, res) => {
   try {
@@ -43,12 +57,15 @@ app.get("/test-mail", async (req, res) => {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
       subject: "Test Email ✅",
-      text: "Email working!",
+      text: "Email working properly!",
     });
+
+    console.log("✅ Test email sent");
 
     res.send("Test email sent ✅");
   } catch (err) {
-    console.log(err);
+    console.log("❌ TEST MAIL ERROR:", err);
+
     res.send("Email failed ❌");
   }
 });
@@ -66,30 +83,55 @@ app.post("/webhook", async (req, res) => {
     if (body.event === "payment.captured") {
       const payment = body.payload.payment.entity;
 
-      console.log("FULL PAYMENT:", payment);
+      console.log("💳 FULL PAYMENT OBJECT:", payment);
 
       const email = payment.email || process.env.EMAIL_USER;
 
+      console.log("📩 EMAIL RECEIVED:", email);
+
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
+
         to: email,
-        subject: "Warli Workshop Access 🎨",
+
+        subject: "Warli Workshop Registration Successful 🎨",
+
         html: `
-          <h2>Welcome to Warli Workshop 🎨</h2>
+          <div style="font-family:sans-serif; padding:20px; line-height:1.7;">
 
-          <p>Thank you for registering!</p>
+            <h2>Welcome to Rangdhara Warli Workshop 🎨</h2>
 
-          <p><strong>Date:</strong> 22 March</p>
-          <p><strong>Time:</strong> 6 PM - 8 PM</p>
+            <p>Thank you for registering successfully!</p>
 
-          <p>Check materials below:</p>
+            <p><strong>Date:</strong> 22 March</p>
 
-          <ul>
-            <li>PDF Guide: [Add link]</li>
-            <li>Reference Images: [Add link]</li>
-          </ul>
+            <p><strong>Time:</strong> 6 PM - 8 PM</p>
 
-          <p>Join 10 mins early 😊</p>
+            <p>
+              Please check all workshop details carefully.
+            </p>
+
+            <h3>Workshop Materials:</h3>
+
+            <ul>
+              <li>📘 PDF Guide: [Add Link]</li>
+              <li>🖼 Reference Images: [Add Link]</li>
+              <li>💬 WhatsApp Group: [Add Link]</li>
+            </ul>
+
+            <p>
+              Please join the WhatsApp group before the workshop.
+            </p>
+
+            <p>
+              Join 10 mins before session starts 😊
+            </p>
+
+            <h3>See you there!</h3>
+
+            <p>Team Rangdhara ✨</p>
+
+          </div>
         `,
       });
 
@@ -99,7 +141,8 @@ app.post("/webhook", async (req, res) => {
     res.status(200).send("OK");
   } catch (err) {
     console.log("❌ WEBHOOK ERROR:", err);
-    res.status(500).send("Error");
+
+    res.status(500).send("Webhook Error");
   }
 });
 
@@ -110,12 +153,5 @@ app.post("/webhook", async (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-
-app.post("/webhook", (req, res) => {
-  console.log("🔥 WEBHOOK HIT");
-
-  res.status(200).send("OK");
+  console.log(`🚀 Server running on port ${PORT}`);
 });
