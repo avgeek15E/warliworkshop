@@ -11,6 +11,8 @@ function RegisterForm() {
     email: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -25,9 +27,11 @@ function RegisterForm() {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
 
       amount: 9900,
+
       currency: "INR",
 
       name: "Rangdhara",
+
       description: "Warli Art Workshop",
 
       prefill: {
@@ -44,10 +48,45 @@ function RegisterForm() {
         color: "#f97316",
       },
 
-      handler: function (response) {
-        console.log("Payment Success:", response);
+      handler: async function (response) {
+        console.log("✅ Payment Success:", response);
 
-        navigate("/thankyou");
+        try {
+          setLoading(true);
+
+          // SEND EMAIL REQUEST TO BACKEND
+
+          const res = await fetch(
+            "https://warliworkshop.onrender.com/send-confirmation",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type": "application/json",
+              },
+
+              body: JSON.stringify({
+                name: formData.name,
+                email: formData.email,
+                phone: formData.mobile,
+              }),
+            },
+          );
+
+          const data = await res.json();
+
+          console.log("📩 Email API Response:", data);
+
+          // REDIRECT TO THANK YOU PAGE
+
+          navigate("/thankyou");
+        } catch (err) {
+          console.log("❌ EMAIL API ERROR:", err);
+
+          alert("Payment successful but email could not be sent.");
+
+          navigate("/thankyou");
+        }
       },
     };
 
@@ -93,8 +132,8 @@ function RegisterForm() {
           onChange={handleChange}
         />
 
-        <button type="submit" className="hero-button">
-          Pay ₹99 & Register
+        <button type="submit" className="hero-button" disabled={loading}>
+          {loading ? "Processing..." : "Pay ₹99 & Register"}
         </button>
       </form>
     </section>

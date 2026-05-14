@@ -11,10 +11,6 @@ const app = express();
    MIDDLEWARE
 ================================ */
 
-// IMPORTANT for Razorpay webhook
-app.use("/webhook", bodyParser.raw({ type: "*/*" }));
-
-// normal json parsing
 app.use(bodyParser.json());
 
 app.use(cors());
@@ -25,6 +21,7 @@ app.use(cors());
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
+
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -55,8 +52,11 @@ app.get("/test-mail", async (req, res) => {
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
+
       to: process.env.EMAIL_USER,
+
       subject: "Test Email ✅",
+
       text: "Email working properly!",
     });
 
@@ -71,78 +71,107 @@ app.get("/test-mail", async (req, res) => {
 });
 
 /* ===============================
-   RAZORPAY WEBHOOK
+   SEND CONFIRMATION EMAIL
 ================================ */
 
-app.post("/webhook", async (req, res) => {
+app.post("/send-confirmation", async (req, res) => {
   try {
-    const body = JSON.parse(req.body.toString());
+    const { name, email, phone } = req.body;
 
-    console.log("🔥 WEBHOOK HIT:", body.event);
+    console.log("📩 Incoming User:", {
+      name,
+      email,
+      phone,
+    });
 
-    if (body.event === "payment.captured") {
-      const payment = body.payload.payment.entity;
+    const safeEmail = email?.trim() || process.env.EMAIL_USER;
 
-      console.log("💳 FULL PAYMENT OBJECT:", payment);
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
 
-      const email = payment.email || process.env.EMAIL_USER;
+      to: safeEmail,
 
-      console.log("📩 EMAIL RECEIVED:", email);
+      subject: "Warli Workshop Registration Successful 🎨",
 
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
+      html: `
+        <div style="
+          font-family:sans-serif;
+          padding:20px;
+          line-height:1.7;
+          color:#333;
+        ">
 
-        to: email,
+          <h2 style="color:#7c2d12;">
+            Welcome to Rangdhara Warli Workshop 🎨
+          </h2>
 
-        subject: "Warli Workshop Registration Successful 🎨",
+          <p>Hi ${name || "Participant"},</p>
 
-        html: `
-          <div style="font-family:sans-serif; padding:20px; line-height:1.7;">
+          <p>
+            Thank you for registering successfully!
+          </p>
 
-            <h2>Welcome to Rangdhara Warli Workshop 🎨</h2>
+          <p>
+            Please check all workshop details carefully.
+          </p>
 
-            <p>Thank you for registering successfully!</p>
-
-            <p><strong>Date:</strong> 22 March</p>
-
-            <p><strong>Time:</strong> 6 PM - 8 PM</p>
+          <div style="
+            background:#fff7ed;
+            padding:15px;
+            border-radius:12px;
+            margin:20px 0;
+          ">
 
             <p>
-              Please check all workshop details carefully.
-            </p>
-
-            <h3>Workshop Materials:</h3>
-
-            <ul>
-              <li>📘 PDF Guide: [Add Link]</li>
-              <li>🖼 Reference Images: [Add Link]</li>
-              <li>💬 WhatsApp Group: [Add Link]</li>
-            </ul>
-
-            <p>
-              Please join the WhatsApp group before the workshop.
+              <strong>📅 Date:</strong> 22 March
             </p>
 
             <p>
-              Join 10 mins before session starts 😊
+              <strong>⏰ Time:</strong> 6 PM - 8 PM
             </p>
-
-            <h3>See you there!</h3>
-
-            <p>Team Rangdhara ✨</p>
 
           </div>
-        `,
-      });
 
-      console.log("✅ Email sent to:", email);
-    }
+          <h3>Workshop Materials:</h3>
 
-    res.status(200).send("OK");
+          <ul>
+            <li>📘 PDF Guide: [ADD LINK]</li>
+
+            <li>🖼 Reference Images: [ADD LINK]</li>
+
+            <li>💬 WhatsApp Group: [ADD LINK]</li>
+          </ul>
+
+          <p>
+            Please join the WhatsApp group before the workshop.
+          </p>
+
+          <p>
+            Join 10 mins before the session 😊
+          </p>
+
+          <h3>See you there!</h3>
+
+          <p>
+            Team Rangdhara ✨
+          </p>
+
+        </div>
+      `,
+    });
+
+    console.log("✅ Email sent to:", safeEmail);
+
+    res.status(200).json({
+      success: true,
+    });
   } catch (err) {
-    console.log("❌ WEBHOOK ERROR:", err);
+    console.log("❌ EMAIL ERROR:", err);
 
-    res.status(500).send("Webhook Error");
+    res.status(500).json({
+      success: false,
+      message: "Email sending failed",
+    });
   }
 });
 
