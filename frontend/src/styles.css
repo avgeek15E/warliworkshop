@@ -120,9 +120,13 @@ button,
 ================================ */
 
 .hero {
+
   text-align: center;
-  padding: 30px 20px 40px;
-  max-width: 1100px;
+
+  padding: 30px 20px 50px;
+
+  max-width: 1200px;
+
   margin: auto;
 }
 
@@ -131,44 +135,69 @@ button,
 ================================ */
 
 .hero-brand {
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
-  margin-bottom: 12px;
+
+  margin-bottom: 14px;
 }
 
 .hero-logo {
-  width: 70px;
-  height: 70px;
+
+  width: 78px;
+
+  height: 78px;
+
+  object-fit: cover;
+
   border-radius: 50%;
+
   border: 3px solid #fed7aa;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.15);
 }
 
 .hero-brand-name {
+
   font-family: 'Playfair Display', serif;
-  font-size: 20px;
+
+  font-size: 22px;
+
   color: #7c2d12;
-  margin-top: 6px;
+
+  margin-top: 8px;
 }
 
 /* ===============================
-   TITLE
+   TITLES
 ================================ */
 
 .hero-title {
+
   font-family: 'Playfair Display', serif;
-  font-size: 52px;
-  font-weight: 700;
+
+  font-size: 56px;
+
+  line-height: 1.1;
+
   color: #7c2d12;
-  margin-bottom: 6px;
+
+  margin-bottom: 10px;
 }
 
 .hero-subtitle {
+
   font-size: 22px;
-  font-weight: 500;
+
   color: #92400e;
+
   margin-bottom: 10px;
+
+  font-weight: 500;
 }
 
 /* ===============================
@@ -176,93 +205,218 @@ button,
 ================================ */
 
 .hero-content {
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
-  gap: 30px;
-  margin-top: 12px;
+
+  gap: 50px;
+
+  margin-top: 30px;
+
+  flex-wrap: wrap;
 }
 
 /* ===============================
-   VIDEO
+   HERO IMAGE
 ================================ */
 
-.hero-video video {
-  width: 100%;
-  max-width: 520px;
-  border-radius: 20px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.18);
-  transition: transform .3s ease;
+.hero-image {
+
+  flex: 1;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
 }
 
-.hero-video video:hover {
+.hero-image img {
+
+  width: 100%;
+
+  max-width: 540px;
+
+  height: 420px;
+
+  object-fit: cover;
+
+  border-radius: 24px;
+
+  display: block;
+
+  box-shadow:
+    0 25px 55px rgba(0,0,0,0.18);
+
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease;
+}
+
+.hero-image img:hover {
+
   transform: scale(1.03);
+
+  box-shadow:
+    0 30px 65px rgba(0,0,0,0.22);
 }
 
 /* ===============================
-   INFO CARDS
+   HERO CARDS
 ================================ */
 
 .hero-cards {
+
+  flex: 1;
+
   display: flex;
+
   flex-direction: column;
-  gap: 16px;
-  align-items: center;
+
+  justify-content: center;
+
+  align-items: flex-start;
+
+  gap: 18px;
 }
 
-/* Individual card */
-
 .hero-info-card {
+
   background: white;
-  padding: 16px 20px;
-  border-radius: 16px;
 
-  width: 220px;
+  width: 100%;
 
-  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+  max-width: 300px;
 
-  transition: transform .2s ease, box-shadow .2s ease;
+  padding: 20px 24px;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 16px 36px rgba(0,0,0,0.12);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
 }
 
 .hero-info-card:hover {
+
   transform: translateY(-5px);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+
+  box-shadow:
+    0 20px 45px rgba(0,0,0,0.16);
 }
 
 /* Labels */
 
 .card-label {
+
   font-size: 13px;
-  letter-spacing: 1px;
+
   color: #a16207;
-  margin-bottom: 4px;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 6px;
 }
 
 /* Values */
 
 .card-value {
-  font-size: 16px;
-  font-weight: 600;
+
+  font-size: 17px;
+
+  line-height: 1.5;
+
   color: #7c2d12;
 
-  line-height: 1.4;
-
-  word-wrap: break-word;
-  white-space: normal;
+  font-weight: 600;
 }
 
-/* Highlight card */
+/* Highlight Card */
 
 .highlight-card {
-  background: linear-gradient(135deg,#ffedd5,#fed7aa);
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffedd5,
+      #fed7aa
+    );
 }
 
 /* ===============================
-   REGISTER BUTTON
+   HERO BUTTON
 ================================ */
 
 .hero-button {
-  margin-top: 28px;
+
+  display: inline-block;
+
+  margin-top: 36px;
+
+  padding: 18px 42px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f97316,
+      #ea580c
+    );
+
+  color: white;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  border-radius: 999px;
+
+  text-decoration: none;
+
+  border: none;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 14px 30px rgba(249,115,22,0.35);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+
+  animation: pulse 1.8s infinite;
+}
+
+.hero-button:hover {
+
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 20px 40px rgba(249,115,22,0.45);
+}
+
+/* ===============================
+   PULSE
+================================ */
+
+@keyframes pulse {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ===============================
@@ -272,27 +426,212 @@ button,
 @media (max-width: 900px) {
 
   .hero-content {
+
     flex-direction: column;
-    gap: 20px;
+
+    gap: 32px;
   }
 
-  .hero-title {
-    font-size: 40px;
+  .hero-image,
+  .hero-cards {
+
+    width: 100%;
+
+    align-items: center;
   }
 
-  .hero-subtitle {
-    font-size: 18px;
-  }
+  .hero-image img {
 
-  .hero-video video {
     max-width: 100%;
+
+    height: auto;
   }
 
   .hero-info-card {
-    width: 240px;
+
+    max-width: 420px;
   }
 
+  .hero-title {
+
+    font-size: 44px;
+  }
+
+  .hero-subtitle {
+
+    font-size: 18px;
+  }
 }
+
+@media (max-width: 600px) {
+
+  .hero {
+
+    padding: 24px 16px 40px;
+  }
+
+  .hero-title {
+
+    font-size: 34px;
+  }
+
+  .hero-subtitle {
+
+    font-size: 16px;
+  }
+
+  .hero-button {
+
+    width: 100%;
+
+    max-width: 320px;
+  }
+}
+/* ===============================
+   CTA BUTTON
+================================ */
+
+.hero-button {
+
+  display: inline-block;
+
+  margin-top: 35px;
+
+  padding: 16px 34px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f97316,
+      #ea580c
+    );
+
+  color: white;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  border-radius: 999px;
+
+  box-shadow:
+    0 12px 30px rgba(249,115,22,0.35);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  animation: pulse 2s infinite;
+}
+
+/* Hover */
+
+.hero-button:hover {
+
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 18px 40px rgba(249,115,22,0.45);
+}
+
+/* Pulse Animation */
+
+@keyframes pulse {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+
+  .hero-content {
+
+    flex-direction: column;
+
+    gap: 32px;
+  }
+
+  .hero-title {
+
+    font-size: 42px;
+  }
+
+  .hero-subtitle {
+
+    font-size: 19px;
+  }
+
+  .hero-image img {
+
+    max-width: 100%;
+
+    height: auto;
+  }
+
+  .hero-cards {
+
+    width: 100%;
+
+    align-items: center;
+  }
+
+  .hero-info-card {
+
+    width: 100%;
+
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .hero {
+
+    padding: 24px 16px 34px;
+  }
+
+  .hero-title {
+
+    font-size: 34px;
+  }
+
+  .hero-subtitle {
+
+    font-size: 17px;
+  }
+
+  .hero-button {
+
+    width: 100%;
+
+    max-width: 320px;
+  }
+}
+
+
+/* ===============================
+   REGISTER BUTTON
+================================ */
+
+.hero-button {
+  margin-top: 28px;
+}
+
 
 /* ===============================
    INSTRUCTOR SECTION

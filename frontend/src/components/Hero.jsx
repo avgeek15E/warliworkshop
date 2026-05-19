@@ -6,6 +6,7 @@ function Hero() {
       {/* Brand */}
       <div className="hero-brand">
         <img src="/Rangdhara.jpg" alt="Rangdhara Logo" className="hero-logo" />
+
         <div className="hero-brand-name">Rangdhara</div>
       </div>
 
@@ -16,28 +17,23 @@ function Hero() {
 
       {/* Content */}
       <div className="hero-content">
-        {/* Video */}
-        <div className="hero-video">
-          <video
-            src="/dummy2.mp4"
-            poster="/students/4.png"
-            controls
-            playsInline
-            preload="metadata"
-            onEnded={(e) => e.target.pause()}
-          />
+        {/* IMAGE */}
+        <div className="hero-image">
+          <img src="/hero image.jpeg" alt="Warli Artwork" />
         </div>
 
         {/* Info cards */}
         <div className="hero-cards">
           <div className="hero-info-card">
             <p className="card-label">📅 Date</p>
-            <p className="card-value">Comming Soon</p>
+
+            <p className="card-value">5th June 2026</p>
           </div>
 
           <div className="hero-info-card">
             <p className="card-label">⏰ Time</p>
-            <p className="card-value">Comming Soon</p>
+
+            <p className="card-value">2pm to 5pm</p>
           </div>
 
           <div className="hero-info-card highlight-card">
