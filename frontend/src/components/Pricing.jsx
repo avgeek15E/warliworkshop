@@ -6,8 +6,8 @@ function Pricing() {
       {/* SCROLLING RIBBON */}
       <div className="discount-ribbon">
         <div className="ribbon-track">
-          SPECIAL DISCOUNT • Special Gudipadva Offer!! • SPECIAL DISCOUNT •
-          Special Gudipadva Offer!! • SPECIAL DISCOUNT • Special Gudipadva
+          SPECIAL DISCOUNT • Special Summer Offer!! • SPECIAL DISCOUNT •
+          Special Summer Offer!! • SPECIAL DISCOUNT • Special Summer
           Offer!!
         </div>
       </div>
@@ -17,7 +17,7 @@ function Pricing() {
       <div className="pricing-container">
         {/* LEFT CARD - OFFER */}
         <div className="pricing-card offer-card">
-          <h3>March's Special Offer</h3>
+          <h3>Summer Special Offer</h3>
 
           <p className="old-price">₹499</p>
 
