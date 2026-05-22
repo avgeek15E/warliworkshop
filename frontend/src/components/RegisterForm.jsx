@@ -14,7 +14,7 @@ function RegisterForm() {
   const [loading, setLoading] = useState(false);
 
   /* ===============================
-     HANDLE INPUT CHANGE
+     HANDLE INPUT
   ============================== */
 
   const handleChange = (e) => {
@@ -34,13 +34,15 @@ function RegisterForm() {
     try {
       console.log("RAZORPAY KEY:", import.meta.env.VITE_RAZORPAY_KEY_ID);
 
-      // CHECK RAZORPAY LOADED
+      /* CHECK SDK */
 
       if (!window.Razorpay) {
         alert("Razorpay SDK failed to load.");
 
         return;
       }
+
+      /* OPTIONS */
 
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -53,9 +55,13 @@ function RegisterForm() {
 
         description: "Warli Art Workshop",
 
+        image: "/Rangdhara.jpg",
+
         prefill: {
           name: formData.name,
+
           email: formData.email,
+
           contact: formData.mobile,
         },
 
@@ -67,6 +73,23 @@ function RegisterForm() {
           color: "#f97316",
         },
 
+        modal: {
+          ondismiss: function () {
+            console.log("❌ PAYMENT POPUP CLOSED");
+          },
+
+          escape: true,
+
+          backdropclose: false,
+        },
+
+        retry: {
+          enabled: true,
+          max_count: 2,
+        },
+
+        timeout: 300,
+
         /* ===============================
            PAYMENT SUCCESS
         ============================== */
@@ -77,7 +100,7 @@ function RegisterForm() {
           try {
             setLoading(true);
 
-            console.log("📩 Sending email request...");
+            console.log("📩 Sending email...");
 
             const res = await fetch(
               "https://rangdharaworkshop.onrender.com/send-confirmation",
@@ -110,7 +133,7 @@ function RegisterForm() {
               alert("Payment successful but email failed.");
             }
           } catch (err) {
-            console.log("❌ FETCH ERROR:", err);
+            console.log("❌ EMAIL ERROR:", err);
 
             alert("Payment successful but email failed.");
           } finally {
@@ -119,6 +142,8 @@ function RegisterForm() {
         },
       };
 
+      /* OPEN PAYMENT */
+
       const rzp = new window.Razorpay(options);
 
       /* ===============================
@@ -126,9 +151,9 @@ function RegisterForm() {
       ============================== */
 
       rzp.on("payment.failed", function (response) {
-        console.log("❌ PAYMENT FAILED:", response);
+        console.log("❌ FULL PAYMENT ERROR:", response);
 
-        alert("Payment failed. Please try again.");
+        alert(response.error.description);
       });
 
       rzp.open();
