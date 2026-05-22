@@ -13,6 +13,10 @@ function RegisterForm() {
 
   const [loading, setLoading] = useState(false);
 
+  /* ===============================
+     HANDLE INPUT CHANGE
+  ============================== */
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -20,81 +24,119 @@ function RegisterForm() {
     });
   };
 
-  const handlePayment = (e) => {
+  /* ===============================
+     HANDLE PAYMENT
+  ============================== */
+
+  const handlePayment = async (e) => {
     e.preventDefault();
 
-    console.log(import.meta.env.VITE_RAZORPAY_KEY_ID);
+    try {
+      console.log("RAZORPAY KEY:", import.meta.env.VITE_RAZORPAY_KEY_ID);
 
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      // CHECK RAZORPAY LOADED
 
-      amount: 9900,
+      if (!window.Razorpay) {
+        alert("Razorpay SDK failed to load.");
 
-      currency: "INR",
+        return;
+      }
 
-      name: "Rangdhara",
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
 
-      description: "Warli Art Workshop",
+        amount: 9900,
 
-      prefill: {
-        name: formData.name,
-        email: formData.email,
-        contact: formData.mobile,
-      },
+        currency: "INR",
 
-      notes: {
-        city: formData.city,
-      },
+        name: "Rangdhara",
 
-      theme: {
-        color: "#f97316",
-      },
+        description: "Warli Art Workshop",
 
-      handler: async function (response) {
-        console.log("✅ Payment Success:", response);
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.mobile,
+        },
 
-        try {
-          setLoading(true);
+        notes: {
+          city: formData.city,
+        },
 
-          // SEND EMAIL REQUEST TO BACKEND
+        theme: {
+          color: "#f97316",
+        },
 
-          const res = await fetch(
-            "https://rangdharaworkshop.onrender.com/send-confirmation",
-            {
-              method: "POST",
+        /* ===============================
+           PAYMENT SUCCESS
+        ============================== */
 
-              headers: {
-                "Content-Type": "application/json",
+        handler: async function (response) {
+          console.log("✅ PAYMENT SUCCESS:", response);
+
+          try {
+            setLoading(true);
+
+            console.log("📩 Sending email request...");
+
+            const res = await fetch(
+              "https://rangdharaworkshop.onrender.com/send-confirmation",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type": "application/json",
+                },
+
+                body: JSON.stringify({
+                  name: formData.name,
+
+                  email: formData.email,
+
+                  phone: formData.mobile,
+                }),
               },
+            );
 
-              body: JSON.stringify({
-                name: formData.name,
-                email: formData.email,
-                phone: formData.mobile,
-              }),
-            },
-          );
+            console.log("📩 RESPONSE STATUS:", res.status);
 
-          const data = await res.json();
+            const data = await res.json();
 
-          console.log("📩 Email API Response:", data);
+            console.log("📩 RESPONSE DATA:", data);
 
-          // REDIRECT TO THANK YOU PAGE
+            if (data.success) {
+              navigate("/thankyou");
+            } else {
+              alert("Payment successful but email failed.");
+            }
+          } catch (err) {
+            console.log("❌ FETCH ERROR:", err);
 
-          navigate("/thankyou");
-        } catch (err) {
-          console.log("❌ EMAIL API ERROR:", err);
+            alert("Payment successful but email failed.");
+          } finally {
+            setLoading(false);
+          }
+        },
+      };
 
-          alert("Payment successful but email could not be sent.");
+      const rzp = new window.Razorpay(options);
 
-          navigate("/thankyou");
-        }
-      },
-    };
+      /* ===============================
+         PAYMENT FAILED
+      ============================== */
 
-    const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function (response) {
+        console.log("❌ PAYMENT FAILED:", response);
 
-    rzp.open();
+        alert("Payment failed. Please try again.");
+      });
+
+      rzp.open();
+    } catch (err) {
+      console.log("❌ GENERAL ERROR:", err);
+
+      alert("Something went wrong.");
+    }
   };
 
   return (
