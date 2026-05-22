@@ -59,7 +59,7 @@ function RegisterForm() {
           // SEND EMAIL REQUEST TO BACKEND
 
           const res = await fetch(
-            "https://warliworkshop.onrender.com/send-confirmation",
+            "https://rangdharaworkshop.onrender.com/send-confirmation",
             {
               method: "POST",
 
