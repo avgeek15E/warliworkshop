@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const express = require("express");
-const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 
@@ -11,22 +10,9 @@ const app = express();
    MIDDLEWARE
 ================================ */
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(cors());
-
-/* ===============================
-   EMAIL CONFIG
-================================ */
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
 
 /* ===============================
    ROOT ROUTE
@@ -45,6 +31,32 @@ app.get("/ping", (req, res) => {
 });
 
 /* ===============================
+   EMAIL CONFIG
+================================ */
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+
+  auth: {
+    user: process.env.EMAIL_USER,
+
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+/* ===============================
+   VERIFY MAIL SERVER
+================================ */
+
+transporter.verify(function (error, success) {
+  if (error) {
+    console.log("❌ MAIL SERVER ERROR:", error);
+  } else {
+    console.log("✅ MAIL SERVER READY");
+  }
+});
+
+/* ===============================
    TEST MAIL ROUTE
 ================================ */
 
@@ -60,13 +72,17 @@ app.get("/test-mail", async (req, res) => {
       text: "Email working properly!",
     });
 
-    console.log("✅ Test email sent");
+    console.log("✅ TEST MAIL SENT");
 
-    res.send("Test email sent ✅");
+    res.status(200).json({
+      success: true,
+    });
   } catch (err) {
     console.log("❌ TEST MAIL ERROR:", err);
 
-    res.send("Email failed ❌");
+    res.status(500).json({
+      success: false,
+    });
   }
 });
 
@@ -78,98 +94,139 @@ app.post("/send-confirmation", async (req, res) => {
   try {
     const { name, email, phone } = req.body;
 
-    console.log("📩 Incoming User:", {
+    console.log("📩 NEW USER:", {
       name,
       email,
       phone,
     });
 
-    const safeEmail = email?.trim() || process.env.EMAIL_USER;
+    /* VALIDATION */
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    if (!email) {
+      return res.status(400).json({
+        success: false,
 
-      to: safeEmail,
+        message: "Email is required",
+      });
+    }
 
-      subject: "Warli Workshop Registration Successful 🎨",
+    /* SEND EMAIL */
+
+    const info = await transporter.sendMail({
+      from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
+
+      to: email.trim(),
+
+      subject: "Workshop Registration Successful 🎨",
 
       html: `
-        <div style="
-          font-family:sans-serif;
-          padding:20px;
-          line-height:1.7;
-          color:#333;
-        ">
-
-          <h2 style="color:#7c2d12;">
-            Welcome to Rangdhara Warli Workshop 🎨
-          </h2>
-
-          <p>Hi ${name || "Participant"},</p>
-
-          <p>
-            Thank you for registering successfully!
-          </p>
-
-          <p>
-            Please check all workshop details carefully.
-          </p>
 
           <div style="
-            background:#fff7ed;
-            padding:15px;
-            border-radius:12px;
-            margin:20px 0;
+            font-family:Arial,sans-serif;
+            padding:20px;
+            line-height:1.8;
+            color:#333;
           ">
 
+            <h2 style="
+              color:#7c2d12;
+            ">
+              Welcome to Rangdhara Workshop 🎨
+            </h2>
+
             <p>
-              <strong>📅 Date:</strong> 22 March
+              Hi ${name || "Participant"},
             </p>
 
             <p>
-              <strong>⏰ Time:</strong> 6 PM - 8 PM
+              Your registration was successful.
+            </p>
+
+            <p>
+              Thank you for joining the workshop.
+            </p>
+
+            <div style="
+              background:#fff7ed;
+              padding:15px;
+              border-radius:12px;
+              margin:20px 0;
+            ">
+
+              <p>
+                <strong>
+                  📅 Date:
+                </strong>
+
+                5th June 2026
+              </p>
+
+              <p>
+                <strong>
+                  ⏰ Time:
+                </strong>
+
+                2 PM to 5 PM
+              </p>
+
+            </div>
+
+            <h3>
+              Workshop Materials
+            </h3>
+
+            <ul>
+
+              <li>
+                📘 PDF Guide:
+                [ADD LINK]
+              </li>
+
+              <li>
+                🖼 Reference Images:
+                [ADD LINK]
+              </li>
+
+              <li>
+                💬 WhatsApp Group:
+                [ADD LINK]
+              </li>
+
+            </ul>
+
+            <p>
+              Please join the WhatsApp group before workshop.
+            </p>
+
+            <p>
+              Join 10 mins before session 😊
+            </p>
+
+            <h3>
+              See you there ✨
+            </h3>
+
+            <p>
+              Team Rangdhara
             </p>
 
           </div>
-
-          <h3>Workshop Materials:</h3>
-
-          <ul>
-            <li>📘 PDF Guide: [ADD LINK]</li>
-
-            <li>🖼 Reference Images: [ADD LINK]</li>
-
-            <li>💬 WhatsApp Group: [ADD LINK]</li>
-          </ul>
-
-          <p>
-            Please join the WhatsApp group before the workshop.
-          </p>
-
-          <p>
-            Join 10 mins before the session 😊
-          </p>
-
-          <h3>See you there!</h3>
-
-          <p>
-            Team Rangdhara ✨
-          </p>
-
-        </div>
-      `,
+          `,
     });
 
-    console.log("✅ Email sent to:", safeEmail);
+    console.log("✅ EMAIL SENT:", info.messageId);
 
     res.status(200).json({
       success: true,
     });
   } catch (err) {
-    console.log("❌ EMAIL ERROR:", err);
+    console.log("❌ SEND MAIL ERROR:");
+
+    console.log(err);
 
     res.status(500).json({
       success: false,
+
       message: "Email sending failed",
     });
   }
