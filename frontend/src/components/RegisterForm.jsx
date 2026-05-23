@@ -97,10 +97,14 @@ function RegisterForm() {
         handler: async function (response) {
           console.log("✅ PAYMENT SUCCESS:", response);
 
+          /* SHOW THANK YOU PAGE IMMEDIATELY */
+
+          navigate("/thankyou");
+
+          /* SEND EMAIL IN BACKGROUND */
+
           try {
             setLoading(true);
-
-            console.log("📩 Sending email...");
 
             const res = await fetch(
               "https://rangdharaworkshop.onrender.com/send-confirmation",
@@ -127,15 +131,11 @@ function RegisterForm() {
 
             console.log("📩 RESPONSE DATA:", data);
 
-            if (data.success) {
-              navigate("/thankyou");
-            } else {
-              alert("Payment successful but email failed.");
+            if (!data.success) {
+              console.log("Email sending failed");
             }
           } catch (err) {
             console.log("❌ EMAIL ERROR:", err);
-
-            alert("Payment successful but email failed.");
           } finally {
             setLoading(false);
           }
@@ -146,9 +146,7 @@ function RegisterForm() {
 
       const rzp = new window.Razorpay(options);
 
-      /* ===============================
-         PAYMENT FAILED
-      ============================== */
+      /* PAYMENT FAILED */
 
       rzp.on("payment.failed", function (response) {
         console.log("❌ FULL PAYMENT ERROR:", response);
