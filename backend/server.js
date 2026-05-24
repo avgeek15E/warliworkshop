@@ -50,7 +50,9 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify(function (error, success) {
   if (error) {
-    console.log("❌ MAIL SERVER ERROR:", error);
+    console.log("❌ MAIL SERVER ERROR:");
+
+    console.log(error);
   } else {
     console.log("✅ MAIL SERVER READY");
   }
@@ -78,7 +80,9 @@ app.get("/test-mail", async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.log("❌ TEST MAIL ERROR:", err);
+    console.log("❌ TEST MAIL ERROR:");
+
+    console.log(err);
 
     res.status(500).json({
       success: false,
@@ -94,7 +98,9 @@ app.post("/send-confirmation", async (req, res) => {
   try {
     const { name, email, phone } = req.body;
 
-    console.log("📩 NEW USER:", {
+    console.log("📩 NEW USER:");
+
+    console.log({
       name,
       email,
       phone,
@@ -110,124 +116,135 @@ app.post("/send-confirmation", async (req, res) => {
       });
     }
 
-    /* SEND EMAIL */
-
-    const info = await transporter.sendMail({
-      from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
-
-      to: email.trim(),
-
-      subject: "Workshop Registration Successful 🎨",
-
-      html: `
-
-          <div style="
-            font-family:Arial,sans-serif;
-            padding:20px;
-            line-height:1.8;
-            color:#333;
-          ">
-
-            <h2 style="
-              color:#7c2d12;
-            ">
-              Welcome to Rangdhara Workshop 🎨
-            </h2>
-
-            <p>
-              Hi ${name || "Participant"},
-            </p>
-
-            <p>
-              Your registration was successful.
-            </p>
-
-            <p>
-              Thank you for joining the workshop.
-            </p>
-
-            <div style="
-              background:#fff7ed;
-              padding:15px;
-              border-radius:12px;
-              margin:20px 0;
-            ">
-
-              <p>
-                <strong>
-                  📅 Date:
-                </strong>
-
-                5th June 2026
-              </p>
-
-              <p>
-                <strong>
-                  ⏰ Time:
-                </strong>
-
-                2 PM to 5 PM
-              </p>
-
-            </div>
-
-            <h3>
-              Workshop Materials
-            </h3>
-
-            <ul>
-
-              <li>
-                📘 PDF Guide:
-                [ADD LINK]
-              </li>
-
-              <li>
-                🖼 Reference Images:
-                [ADD LINK]
-              </li>
-
-              <li>
-                💬 WhatsApp Group:
-                [ADD LINK]
-              </li>
-
-            </ul>
-
-            <p>
-              Please join the WhatsApp group before workshop.
-            </p>
-
-            <p>
-              Join 10 mins before session 😊
-            </p>
-
-            <h3>
-              See you there ✨
-            </h3>
-
-            <p>
-              Team Rangdhara
-            </p>
-
-          </div>
-          `,
-    });
-
-    console.log("✅ EMAIL SENT:", info.messageId);
+    /* SEND RESPONSE IMMEDIATELY */
 
     res.status(200).json({
       success: true,
     });
+
+    /* SEND EMAIL IN BACKGROUND */
+
+    transporter
+      .sendMail({
+        from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
+
+        to: email.trim(),
+
+        subject: "Workshop Registration Successful 🎨",
+
+        html: `
+
+        <div style="
+          font-family:Arial,sans-serif;
+          padding:20px;
+          line-height:1.8;
+          color:#333;
+        ">
+
+          <h2 style="
+            color:#7c2d12;
+          ">
+            Welcome to Rangdhara Workshop 🎨
+          </h2>
+
+          <p>
+            Hi ${name || "Participant"},
+          </p>
+
+          <p>
+            Your registration was successful.
+          </p>
+
+          <p>
+            Thank you for joining the workshop.
+          </p>
+
+          <div style="
+            background:#fff7ed;
+            padding:15px;
+            border-radius:12px;
+            margin:20px 0;
+          ">
+
+            <p>
+              <strong>
+                📅 Date:
+              </strong>
+
+              5th June 2026
+            </p>
+
+            <p>
+              <strong>
+                ⏰ Time:
+              </strong>
+
+              2 PM to 5 PM
+            </p>
+
+          </div>
+
+          <h3>
+            Workshop Materials
+          </h3>
+
+          <ul>
+
+            <li>
+              📘 PDF Guide:
+              [ADD LINK]
+            </li>
+
+            <li>
+              🖼 Reference Images:
+              [ADD LINK]
+            </li>
+
+            <li>
+              💬 WhatsApp Group:
+              [ADD LINK]
+            </li>
+
+          </ul>
+
+          <p>
+            Please join the WhatsApp group before workshop.
+          </p>
+
+          <p>
+            Join 10 mins before session 😊
+          </p>
+
+          <h3>
+            See you there ✨
+          </h3>
+
+          <p>
+            Team Rangdhara
+          </p>
+
+        </div>
+        `,
+      })
+      .then((info) => {
+        console.log("✅ EMAIL SENT:");
+
+        console.log(info.messageId);
+      })
+      .catch((err) => {
+        console.log("❌ EMAIL ERROR:");
+
+        console.log(err);
+      });
   } catch (err) {
-    console.log("❌ SEND MAIL ERROR:");
+    console.log("❌ ROUTE ERROR:");
 
     console.log(err);
 
     res.status(500).json({
       success: false,
 
-      message: "Email sending failed",
+      message: "Something went wrong",
     });
   }
 });

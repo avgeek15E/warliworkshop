@@ -34,7 +34,7 @@ function RegisterForm() {
     try {
       console.log("RAZORPAY KEY:", import.meta.env.VITE_RAZORPAY_KEY_ID);
 
-      /* CHECK SDK */
+      /* CHECK RAZORPAY SDK */
 
       if (!window.Razorpay) {
         alert("Razorpay SDK failed to load.");
@@ -42,7 +42,9 @@ function RegisterForm() {
         return;
       }
 
-      /* OPTIONS */
+      setLoading(true);
+
+      /* PAYMENT OPTIONS */
 
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -76,6 +78,8 @@ function RegisterForm() {
         modal: {
           ondismiss: function () {
             console.log("❌ PAYMENT POPUP CLOSED");
+
+            setLoading(false);
           },
 
           escape: true,
@@ -94,51 +98,41 @@ function RegisterForm() {
            PAYMENT SUCCESS
         ============================== */
 
-        handler: async function (response) {
+        handler: function (response) {
           console.log("✅ PAYMENT SUCCESS:", response);
 
-          /* SHOW THANK YOU PAGE IMMEDIATELY */
+          /* IMMEDIATELY SHOW THANK YOU PAGE */
 
           navigate("/thankyou");
 
-          /* SEND EMAIL IN BACKGROUND */
+          /* DO NOT WAIT FOR EMAIL */
 
-          try {
-            setLoading(true);
+          setTimeout(() => {
+            fetch("https://rangdharaworkshop.onrender.com/send-confirmation", {
+              method: "POST",
 
-            const res = await fetch(
-              "https://rangdharaworkshop.onrender.com/send-confirmation",
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type": "application/json",
-                },
-
-                body: JSON.stringify({
-                  name: formData.name,
-
-                  email: formData.email,
-
-                  phone: formData.mobile,
-                }),
+              headers: {
+                "Content-Type": "application/json",
               },
-            );
 
-            console.log("📩 RESPONSE STATUS:", res.status);
+              body: JSON.stringify({
+                name: formData.name,
 
-            const data = await res.json();
+                email: formData.email,
 
-            console.log("📩 RESPONSE DATA:", data);
+                phone: formData.mobile,
+              }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log("📩 EMAIL RESPONSE:", data);
+              })
+              .catch((err) => {
+                console.log("❌ EMAIL ERROR:", err);
+              });
+          }, 1000);
 
-            if (!data.success) {
-              console.log("Email sending failed");
-            }
-          } catch (err) {
-            console.log("❌ EMAIL ERROR:", err);
-          } finally {
-            setLoading(false);
-          }
+          setLoading(false);
         },
       };
 
@@ -149,7 +143,9 @@ function RegisterForm() {
       /* PAYMENT FAILED */
 
       rzp.on("payment.failed", function (response) {
-        console.log("❌ FULL PAYMENT ERROR:", response);
+        console.log("❌ PAYMENT FAILED:", response);
+
+        setLoading(false);
 
         alert(response.error.description);
       });
@@ -157,6 +153,8 @@ function RegisterForm() {
       rzp.open();
     } catch (err) {
       console.log("❌ GENERAL ERROR:", err);
+
+      setLoading(false);
 
       alert("Something went wrong.");
     }
