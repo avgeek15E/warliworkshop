@@ -34,7 +34,7 @@ function RegisterForm() {
     try {
       console.log("RAZORPAY KEY:", import.meta.env.VITE_RAZORPAY_KEY_ID);
 
-      /* CHECK RAZORPAY SDK */
+      /* CHECK SDK */
 
       if (!window.Razorpay) {
         alert("Razorpay SDK failed to load.");
@@ -67,7 +67,11 @@ function RegisterForm() {
           contact: formData.mobile,
         },
 
+        /* IMPORTANT FOR WEBHOOK */
+
         notes: {
+          name: formData.name,
+
           city: formData.city,
         },
 
@@ -101,36 +105,9 @@ function RegisterForm() {
         handler: function (response) {
           console.log("✅ PAYMENT SUCCESS:", response);
 
-          /* IMMEDIATELY SHOW THANK YOU PAGE */
+          /* ONLY SHOW THANK YOU PAGE */
 
           navigate("/thankyou");
-
-          /* DO NOT WAIT FOR EMAIL */
-
-          setTimeout(() => {
-            fetch("https://rangdharaworkshop.onrender.com/send-confirmation", {
-              method: "POST",
-
-              headers: {
-                "Content-Type": "application/json",
-              },
-
-              body: JSON.stringify({
-                name: formData.name,
-
-                email: formData.email,
-
-                phone: formData.mobile,
-              }),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                console.log("📩 EMAIL RESPONSE:", data);
-              })
-              .catch((err) => {
-                console.log("❌ EMAIL ERROR:", err);
-              });
-          }, 1000);
 
           setLoading(false);
         },
@@ -142,13 +119,17 @@ function RegisterForm() {
 
       /* PAYMENT FAILED */
 
-      rzp.on("payment.failed", function (response) {
-        console.log("❌ PAYMENT FAILED:", response);
+      rzp.on(
+        "payment.failed",
 
-        setLoading(false);
+        function (response) {
+          console.log("❌ PAYMENT FAILED:", response);
 
-        alert(response.error.description);
-      });
+          setLoading(false);
+
+          alert(response.error.description);
+        },
+      );
 
       rzp.open();
     } catch (err) {
