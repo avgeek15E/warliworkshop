@@ -10,9 +10,16 @@ const app = express();
    IMPORTANT FOR RAZORPAY WEBHOOK
 ================================ */
 
-// RAW BODY ONLY FOR WEBHOOK
+/*
+  RAW BODY ONLY FOR WEBHOOK
+*/
 
-app.use("/webhook", express.raw({ type: "*/*" }));
+app.use(
+  "/webhook",
+  express.raw({
+    type: "*/*",
+  }),
+);
 
 /* ===============================
    NORMAL MIDDLEWARE
@@ -42,8 +49,17 @@ app.get("/ping", (req, res) => {
    EMAIL CONFIG
 ================================ */
 
+/*
+  DIRECT SMTP CONFIG
+  MUCH MORE STABLE ON RENDER
+*/
+
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+
+  port: 465,
+
+  secure: true,
 
   auth: {
     user: process.env.EMAIL_USER,
@@ -70,80 +86,101 @@ transporter.verify(function (error, success) {
    TEST MAIL ROUTE
 ================================ */
 
-app.get("/test-mail", async (req, res) => {
-  try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+app.get(
+  "/test-mail",
 
-      to: process.env.EMAIL_USER,
+  async (req, res) => {
+    console.log("🔥 TEST MAIL ROUTE HIT");
 
-      subject: "Test Email ✅",
+    try {
+      const info = await transporter.sendMail({
+        from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
 
-      text: "Email working properly!",
-    });
+        to: process.env.EMAIL_USER,
 
-    console.log("✅ TEST MAIL SENT");
+        subject: "Test Email ✅",
 
-    res.status(200).json({
-      success: true,
-    });
-  } catch (err) {
-    console.log("❌ TEST MAIL ERROR:");
+        text: "Email working properly!",
+      });
 
-    console.log(err);
+      console.log("✅ TEST MAIL SENT");
 
-    res.status(500).json({
-      success: false,
-    });
-  }
-});
+      console.log(info);
+
+      return res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      console.log("❌ TEST MAIL ERROR:");
+
+      console.log(err);
+
+      return res.status(500).json({
+        success: false,
+
+        error: err.message,
+      });
+    }
+  },
+);
 
 /* ===============================
    RAZORPAY WEBHOOK
 ================================ */
 
-app.post("/webhook", async (req, res) => {
-  try {
-    const body = JSON.parse(req.body.toString());
+app.post(
+  "/webhook",
 
-    console.log("🔥 WEBHOOK HIT:");
+  async (req, res) => {
+    try {
+      const body = JSON.parse(req.body.toString());
 
-    console.log(body.event);
+      console.log("🔥 WEBHOOK HIT:");
 
-    /* PAYMENT SUCCESS */
+      console.log(body.event);
 
-    if (body.event === "payment.captured") {
-      const payment = body.payload.payment.entity;
+      /* PAYMENT SUCCESS */
 
-      console.log("💳 PAYMENT DATA:");
+      if (body.event === "payment.captured") {
+        const payment = body.payload.payment.entity;
 
-      console.log(payment);
+        console.log("💳 PAYMENT DATA:");
 
-      const customerName = payment.notes?.name || "Participant";
+        console.log(payment);
 
-      const customerEmail = payment.email;
+        const customerName = payment.notes?.name || "Participant";
 
-      const customerPhone = payment.contact;
+        const customerEmail = payment.email;
 
-      /* VALIDATION */
+        const customerPhone = payment.contact;
 
-      if (!customerEmail) {
-        console.log("❌ EMAIL NOT FOUND");
+        console.log("📩 CUSTOMER:");
 
-        return res.status(400).send("Email missing");
-      }
+        console.log({
+          customerName,
+          customerEmail,
+          customerPhone,
+        });
 
-      /* SEND EMAIL */
+        /* VALIDATION */
 
-      transporter
-        .sendMail({
-          from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
+        if (!customerEmail) {
+          console.log("❌ EMAIL NOT FOUND");
 
-          to: customerEmail.trim(),
+          return res.status(400).send("Email missing");
+        }
 
-          subject: "Workshop Registration Successful 🎨",
+        /* SEND EMAIL */
 
-          html: `
+        transporter
+          .sendMail({
+            from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
+
+            to: customerEmail.trim(),
+
+            subject: "Workshop Registration Successful 🎨",
+
+            html: `
 
             <div style="
               font-family:Arial,sans-serif;
@@ -236,30 +273,35 @@ app.post("/webhook", async (req, res) => {
 
             </div>
             `,
-        })
-        .then((info) => {
-          console.log("✅ EMAIL SENT:");
+          })
 
-          console.log(info.messageId);
-        })
-        .catch((err) => {
-          console.log("❌ EMAIL ERROR:");
+          .then((info) => {
+            console.log("✅ EMAIL SENT:");
 
-          console.log(err);
-        });
+            console.log(info.messageId);
+          })
+
+          .catch((err) => {
+            console.log("❌ EMAIL ERROR:");
+
+            console.log(err);
+          });
+      }
+
+      /*
+        VERY IMPORTANT
+      */
+
+      return res.status(200).send("OK");
+    } catch (err) {
+      console.log("❌ WEBHOOK ERROR:");
+
+      console.log(err);
+
+      return res.status(500).send("Webhook Error");
     }
-
-    /* VERY IMPORTANT */
-
-    res.status(200).send("OK");
-  } catch (err) {
-    console.log("❌ WEBHOOK ERROR:");
-
-    console.log(err);
-
-    res.status(500).send("Webhook Error");
-  }
-});
+  },
+);
 
 /* ===============================
    START SERVER
