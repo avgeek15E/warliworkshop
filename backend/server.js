@@ -50,16 +50,18 @@ app.get("/ping", (req, res) => {
 ================================ */
 
 /*
-  DIRECT SMTP CONFIG
-  MUCH MORE STABLE ON RENDER
+  FORCE IPV4
+  FIXES ENETUNREACH ERROR
 */
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
 
-  port: 465,
+  port: 587,
 
-  secure: true,
+  secure: false,
+
+  family: 4,
 
   auth: {
     user: process.env.EMAIL_USER,
@@ -86,102 +88,94 @@ transporter.verify(function (error, success) {
    TEST MAIL ROUTE
 ================================ */
 
-app.get(
-  "/test-mail",
+app.get("/test-mail", async (req, res) => {
+  console.log("🔥 TEST MAIL ROUTE HIT");
 
-  async (req, res) => {
-    console.log("🔥 TEST MAIL ROUTE HIT");
+  try {
+    const info = await transporter.sendMail({
+      from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
 
-    try {
-      const info = await transporter.sendMail({
-        from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
 
-        to: process.env.EMAIL_USER,
+      subject: "Test Email ✅",
 
-        subject: "Test Email ✅",
+      text: "Email working properly!",
+    });
 
-        text: "Email working properly!",
-      });
+    console.log("✅ TEST MAIL SENT");
 
-      console.log("✅ TEST MAIL SENT");
+    console.log(info);
 
-      console.log(info);
+    return res.status(200).json({
+      success: true,
+    });
+  } catch (err) {
+    console.log("❌ TEST MAIL ERROR:");
 
-      return res.status(200).json({
-        success: true,
-      });
-    } catch (err) {
-      console.log("❌ TEST MAIL ERROR:");
+    console.log(err);
 
-      console.log(err);
+    return res.status(500).json({
+      success: false,
 
-      return res.status(500).json({
-        success: false,
-
-        error: err.message,
-      });
-    }
-  },
-);
+      error: err.message,
+    });
+  }
+});
 
 /* ===============================
    RAZORPAY WEBHOOK
 ================================ */
 
-app.post(
-  "/webhook",
+app.post("/webhook", async (req, res) => {
+  try {
+    const body = JSON.parse(req.body.toString());
 
-  async (req, res) => {
-    try {
-      const body = JSON.parse(req.body.toString());
+    console.log("🔥 WEBHOOK HIT:");
 
-      console.log("🔥 WEBHOOK HIT:");
+    console.log(body.event);
 
-      console.log(body.event);
+    /* PAYMENT SUCCESS */
 
-      /* PAYMENT SUCCESS */
+    if (body.event === "payment.captured") {
+      const payment = body.payload.payment.entity;
 
-      if (body.event === "payment.captured") {
-        const payment = body.payload.payment.entity;
+      console.log("💳 PAYMENT DATA:");
 
-        console.log("💳 PAYMENT DATA:");
+      console.log(payment);
 
-        console.log(payment);
+      const customerName = payment.notes?.name || "Participant";
 
-        const customerName = payment.notes?.name || "Participant";
+      const customerEmail = payment.email;
 
-        const customerEmail = payment.email;
+      const customerPhone = payment.contact;
 
-        const customerPhone = payment.contact;
+      console.log("📩 CUSTOMER:");
 
-        console.log("📩 CUSTOMER:");
+      console.log({
+        customerName,
+        customerEmail,
+        customerPhone,
+      });
 
-        console.log({
-          customerName,
-          customerEmail,
-          customerPhone,
-        });
+      /* VALIDATION */
 
-        /* VALIDATION */
+      if (!customerEmail) {
+        console.log("❌ EMAIL NOT FOUND");
 
-        if (!customerEmail) {
-          console.log("❌ EMAIL NOT FOUND");
+        return res.status(400).send("Email missing");
+      }
 
-          return res.status(400).send("Email missing");
-        }
+      /* SEND EMAIL */
 
-        /* SEND EMAIL */
+      transporter
+        .sendMail({
+          from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
 
-        transporter
-          .sendMail({
-            from: `"Rangdhara Workshop" <${process.env.EMAIL_USER}>`,
+          to: customerEmail.trim(),
 
-            to: customerEmail.trim(),
+          subject: "Workshop Registration Successful 🎨",
 
-            subject: "Workshop Registration Successful 🎨",
-
-            html: `
-
+          html: `
             <div style="
               font-family:Arial,sans-serif;
               padding:20px;
@@ -189,9 +183,7 @@ app.post(
               color:#333;
             ">
 
-              <h2 style="
-                color:#7c2d12;
-              ">
+              <h2 style="color:#7c2d12;">
                 Welcome to Rangdhara Workshop 🎨
               </h2>
 
@@ -215,18 +207,12 @@ app.post(
               ">
 
                 <p>
-                  <strong>
-                    📅 Date:
-                  </strong>
-
+                  <strong>📅 Date:</strong>
                   5th June 2026
                 </p>
 
                 <p>
-                  <strong>
-                    ⏰ Time:
-                  </strong>
-
+                  <strong>⏰ Time:</strong>
                   2 PM to 5 PM
                 </p>
 
@@ -272,36 +258,33 @@ app.post(
               </p>
 
             </div>
-            `,
-          })
+          `,
+        })
 
-          .then((info) => {
-            console.log("✅ EMAIL SENT:");
+        .then((info) => {
+          console.log("✅ EMAIL SENT:");
 
-            console.log(info.messageId);
-          })
+          console.log(info.messageId);
+        })
 
-          .catch((err) => {
-            console.log("❌ EMAIL ERROR:");
+        .catch((err) => {
+          console.log("❌ EMAIL ERROR:");
 
-            console.log(err);
-          });
-      }
-
-      /*
-        VERY IMPORTANT
-      */
-
-      return res.status(200).send("OK");
-    } catch (err) {
-      console.log("❌ WEBHOOK ERROR:");
-
-      console.log(err);
-
-      return res.status(500).send("Webhook Error");
+          console.log(err);
+        });
     }
-  },
-);
+
+    /* VERY IMPORTANT */
+
+    return res.status(200).send("OK");
+  } catch (err) {
+    console.log("❌ WEBHOOK ERROR:");
+
+    console.log(err);
+
+    return res.status(500).send("Webhook Error");
+  }
+});
 
 /* ===============================
    START SERVER
