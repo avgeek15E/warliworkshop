@@ -7,7 +7,7 @@ function Bonuses() {
 
       <div className="bonuses-grid">
         <div className="bonus-card">
-          <img src="/bonus/workshop.png" alt="Workshop Recording" />
+          <img src="/bonus/workshop.png" alt="Recording" />
           <h3>Workshop Recording</h3>
         </div>
 
@@ -17,7 +17,7 @@ function Bonuses() {
         </div>
 
         <div className="bonus-card">
-          <img src="/bonus/whatsapp support.jpeg" alt="WhatsApp Support" />
+          <img src="/bonus/whatsapp.png" alt="WhatsApp Support" />
           <h3>WhatsApp Support Group</h3>
         </div>
       </div>
