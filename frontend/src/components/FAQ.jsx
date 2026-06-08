@@ -5,34 +5,52 @@ function FAQs() {
 
   const faqs = [
     {
-      question: "Can I start even if I don't have confidence in drawing?",
+      question:
+        "मला Drawing किंवा Painting चा अनुभव नाही, तरी मी join करू शकतो/शकते का?",
       answer:
-        "Absolutely! This course is specially designed for beginners to build your confidence step by step.",
+        "होय, नक्की! ही workshop पूर्णपणे beginners साठी design केलेली आहे. आपण अगदी basic पासून step by step Warli Art शिकणार आहोत.",
     },
+
     {
-      question: "What materials will I need for the workshop?",
+      question: "Workshop साठी कोणते materials लागतील?",
       answer:
-        "You will need basic materials like paper, pencil, black pen/brush, and white paint. A complete material list will be sent after registration.",
+        "फक्त साधे materials जसे की drawing paper, pencil, black marker/brush आणि white acrylic paint लागेल. Registration नंतर complete material list तुम्हाला WhatsApp वर पाठवली जाईल.",
     },
+
     {
-      question: "Will I receive recording of the workshop?",
+      question: "Workshop live असेल का?",
       answer:
-        "Yes, the workshop recording will be shared with participants so you can practice later as well.",
+        "होय, ही live online workshop असेल. तुम्ही घरी बसून थेट instructor सोबत शिकू शकता आणि प्रश्नही विचारू शकता.",
     },
+
     {
-      question: "How will I join the workshop?",
+      question: "Workshop ची recording मिळेल का?",
       answer:
-        "You will receive the Google Meet or Zoom link via whatsapp group before the workshop starts.",
+        "होय. Workshop नंतर recording उपलब्ध करून दिली जाईल, त्यामुळे तुम्ही तुमच्या सोयीनुसार पुन्हा practice करू शकता.",
     },
+
     {
-      question: "Is this class suitable for kids or only adults?",
+      question: "Workshop मध्ये final artwork पूर्ण करून घेणार का?",
       answer:
-        "This class is suitable for both kids and adults. Anyone who is interested in art can join.",
+        "होय. Workshop दरम्यान आपण Warli basics पासून सुरुवात करून एक सुंदर complete Warli artwork तयार करणार आहोत.",
     },
+
     {
-      question: "Will I get support if I have doubts?",
+      question: "Workshop join करण्यासाठी link कशी मिळेल?",
       answer:
-        "Yes, you will get full guidance and support during your learning journey.",
+        "Registration नंतर तुम्हाला confirmation email आणि WhatsApp group link मिळेल. Workshop ची joining link group मध्ये आणि email द्वारे share केली जाईल.",
+    },
+
+    {
+      question: "Kids आणि Adults दोघेही join करू शकतात का?",
+      answer:
+        "होय. ही workshop 10+ वयोगटातील मुलांसाठी तसेच adults साठी योग्य आहे. Art शिकण्याची आवड असलेला कोणीही सहभागी होऊ शकतो.",
+    },
+
+    {
+      question: "Workshop नंतर काही support मिळेल का?",
+      answer:
+        "होय. Workshop नंतरही WhatsApp group मध्ये तुमचे questions विचारू शकता आणि artwork वर guidance मिळवू शकता.",
     },
   ];
 
