@@ -7,7 +7,7 @@ function CourseContent() {
 
       <div className="course-grid">
         <div className="course-card card-1">
-          <img src="/topics/tradition.png" alt="tradition" />
+          <img src="/topics/tradition.png" alt="tradition" loading="lazy" />
           <h3>Warli Tradition</h3>
           <p className="course-desc">
             Explore the rich culture and lifestyle of Maharashtra through the
@@ -16,7 +16,7 @@ function CourseContent() {
         </div>
 
         <div className="course-card card-2">
-          <img src="/topics/shapes.png" alt="Shapes" />
+          <img src="/topics/shapes.png" alt="Shapes" loading="lazy" />
           <h3>Warli Basics</h3>
           <p className="course-desc">
             Understand basic shapes like circle, triangle, and lines and gain
@@ -25,7 +25,7 @@ function CourseContent() {
         </div>
 
         <div className="course-card card-3">
-          <img src="/topics/figure.png" alt="Figures" />
+          <img src="/topics/figure.png" alt="Figures" loading="lazy" />
           <h3> Warli Figures & Nature</h3>
           <p className="course-desc">
             Bring your art to life with human figures, animals, houses, and
@@ -34,7 +34,7 @@ function CourseContent() {
         </div>
 
         <div className="course-card card-4">
-          <img src="/topics/borders.png" alt="Borders" />
+          <img src="/topics/borders.png" alt="Borders" loading="lazy" />
           <h3>Warli Borders</h3>
           <p className="course-desc">
             Learn to create elegant borders that frame your artwork and give
@@ -43,7 +43,7 @@ function CourseContent() {
         </div>
 
         <div className="course-card card-5">
-          <img src="/topics/artwork.png" alt="Artwork" />
+          <img src="/topics/artwork.png" alt="Artwork" loading="lazy" />
           <h3>Warli Final Artwork</h3>
           <p className="course-desc">
             Use traditional brush strokes and textures to create a stunning

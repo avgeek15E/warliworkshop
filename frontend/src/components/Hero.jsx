@@ -5,7 +5,7 @@ function Hero() {
     <section className="hero">
       {/* Brand */}
       <div className="hero-brand">
-        <img src="/Rangdhara.jpg" alt="Rangdhara Logo" className="hero-logo" />
+        <img src="/Rangdhara.webp" alt="Rangdhara Logo" className="hero-logo" />
 
         <div className="hero-brand-name">Rangdhara</div>
       </div>

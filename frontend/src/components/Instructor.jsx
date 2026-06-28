@@ -30,7 +30,11 @@ function Instructor() {
 
         {/* Right: Image */}
         <div className="instructor-image">
-          <img src="/Instructor.jpeg" alt="Sarika Badhe - Warli Artist" />
+          <img
+            src="/Instructor.webp"
+            alt="Sarika Badhe - Warli Artist"
+            loading="lazy"
+          />
         </div>
       </div>
     </section>

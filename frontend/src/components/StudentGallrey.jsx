@@ -4,11 +4,11 @@ function StudentGallery() {
   const [paused, setPaused] = useState(false);
 
   const paintings = [
-    "/students/1.png",
-    "/students/2.png",
-    "/students/3.png",
-    "/students/4.png",
-    "/students/5.png",
+    "/students/1.webp",
+    "/students/2.webp",
+    "/students/3.webp",
+    "/students/4.webp",
+    "/students/5.webp"
   ];
 
   /* duplicate images for infinite effect */
