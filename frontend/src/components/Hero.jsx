@@ -19,7 +19,7 @@ function Hero() {
       <div className="hero-content">
         {/* IMAGE */}
         <div className="hero-image">
-          <img src="/hero image.png" alt="Warli Artwork" />
+          <img src="/hero image.webp" alt="Warli Artwork" />
         </div>
 
         {/* Info cards */}
