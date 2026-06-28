@@ -27,13 +27,13 @@ function Hero() {
           <div className="hero-info-card">
             <p className="card-label">📅 Date</p>
 
-            <p className="card-value">Coming Soon</p>
+            <p className="card-value">19th July 2026</p>
           </div>
 
           <div className="hero-info-card">
             <p className="card-label">⏰ Time</p>
 
-            <p className="card-value">Coming Soon</p>
+            <p className="card-value">3PM - 6PM</p>
           </div>
 
           <div className="hero-info-card highlight-card">
