@@ -1258,6 +1258,15 @@ button,
   }
 }
 
+/* Desktop */
+.gallery-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: gallery-scroll 16s linear infinite;
+  will-change: transform;
+}
+
 /* Tablet */
 @media (max-width: 900px) {
   .gallery-track {
@@ -1285,18 +1294,33 @@ button,
     margin-bottom: 25px;
   }
 
+  .gallery-wrapper {
+    width: 100%;
+    overflow: hidden;
+  }
+
   .gallery-track {
+    display: flex;
+    width: max-content;
     gap: 14px;
-    animation-duration: 8s;
+    animation-duration: 10s;
   }
 
   .gallery-card {
-    flex-basis: calc(100vw - 64px);
+    flex: 0 0 calc(100vw - 48px);
+    width: calc(100vw - 48px);
+    min-width: 0;
+    box-sizing: border-box;
     border-radius: 14px;
   }
 
   .gallery-card img {
+    display: block;
+    width: 100%;
     height: 240px;
+    object-fit: contain;
+    object-position: center;
+    background: #f1d6d6;
   }
 }
 
