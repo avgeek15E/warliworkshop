@@ -8,7 +8,11 @@ function StudentGallery() {
     "/students/2.webp",
     "/students/3.webp",
     "/students/4.webp",
-    "/students/5.webp"
+    "/students/5.webp",
+    "/students/6.webp",
+    "/students/7.webp",
+    "/students/8.webp",
+    "/students/9.webp"
   ];
 
   /* duplicate images for infinite effect */
