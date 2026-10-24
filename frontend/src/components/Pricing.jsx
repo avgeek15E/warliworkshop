@@ -16,7 +16,7 @@ function Pricing() {
       <div className="pricing-container">
         {/* LEFT CARD - OFFER */}
         <div className="pricing-card offer-card">
-          <h3>Today's Special Offer</h3>
+          <h3>Diwali's Special Offer</h3>
 
           <p className="old-price">₹499</p>
 
