@@ -130,6 +130,12 @@ button,
   margin: auto;
 }
 
+.card-time {
+  font-size: 15px;
+  font-weight: 600;
+  color: #92400e;
+  margin-top: 6px;
+}
 /* ===============================
    BRAND
 ================================ */
