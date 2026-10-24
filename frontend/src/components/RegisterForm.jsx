@@ -9,6 +9,7 @@ function RegisterForm() {
     city: "",
     mobile: "",
     email: "",
+    batchType: "Adult Batch",
   });
 
   const [loading, setLoading] = useState(false);
@@ -18,61 +19,58 @@ function RegisterForm() {
   ============================== */
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   /* ===============================
      HANDLE PAYMENT
   ============================== */
 
-  const handlePayment = async (e) => {
+  const handlePayment = (e) => {
     e.preventDefault();
 
     try {
-      console.log("RAZORPAY KEY:", import.meta.env.VITE_RAZORPAY_KEY_ID);
+      const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
 
-      /* CHECK SDK */
+      if (!razorpayKey) {
+        alert("Payment configuration is missing. Please contact us.");
+        return;
+      }
 
       if (!window.Razorpay) {
-        alert("Razorpay SDK failed to load.");
-
+        alert("Razorpay failed to load. Please refresh and try again.");
         return;
       }
 
       setLoading(true);
 
-      /* PAYMENT OPTIONS */
-
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-
+        key: razorpayKey,
         amount: 9900,
-
         currency: "INR",
 
         name: "Rangdhara",
-
-        description: "Warli Art Workshop",
-
+        description: `Warli Art Workshop - ${formData.batchType}`,
         image: "/Rangdhara.jpg",
 
         prefill: {
           name: formData.name,
-
           email: formData.email,
-
           contact: formData.mobile,
         },
 
-        /* IMPORTANT FOR WEBHOOK */
+        /* DETAILS VISIBLE IN RAZORPAY PAYMENT RECORDS */
 
         notes: {
           name: formData.name,
-
           city: formData.city,
+          batch_type: formData.batchType,
+          mobile: formData.mobile,
         },
 
         theme: {
@@ -80,14 +78,10 @@ function RegisterForm() {
         },
 
         modal: {
-          ondismiss: function () {
-            console.log("❌ PAYMENT POPUP CLOSED");
-
+          ondismiss: () => {
             setLoading(false);
           },
-
           escape: true,
-
           backdropclose: false,
         },
 
@@ -102,42 +96,38 @@ function RegisterForm() {
            PAYMENT SUCCESS
         ============================== */
 
-        handler: function (response) {
-          console.log("✅ PAYMENT SUCCESS:", response);
-
-          /* ONLY SHOW THANK YOU PAGE */
-
-          navigate("/thankyou");
+        handler: (response) => {
+          console.log("Payment successful:", response);
+          console.log("Selected batch:", formData.batchType);
 
           setLoading(false);
+          navigate("/thankyou");
         },
       };
 
-      /* OPEN PAYMENT */
-
       const rzp = new window.Razorpay(options);
 
-      /* PAYMENT FAILED */
+      /* ===============================
+         PAYMENT FAILED
+      ============================== */
 
-      rzp.on(
-        "payment.failed",
+      rzp.on("payment.failed", (response) => {
+        console.error("Payment failed:", response.error);
 
-        function (response) {
-          console.log("❌ PAYMENT FAILED:", response);
+        setLoading(false);
 
-          setLoading(false);
-
-          alert(response.error.description);
-        },
-      );
+        alert(
+          response.error?.description ||
+            "Payment failed. Please try again."
+        );
+      });
 
       rzp.open();
     } catch (err) {
-      console.log("❌ GENERAL ERROR:", err);
+      console.error("Payment initialization error:", err);
 
       setLoading(false);
-
-      alert("Something went wrong.");
+      alert("Something went wrong. Please try again.");
     }
   };
 
@@ -150,6 +140,7 @@ function RegisterForm() {
           type="text"
           name="name"
           placeholder="Full Name"
+          value={formData.name}
           required
           onChange={handleChange}
         />
@@ -158,6 +149,7 @@ function RegisterForm() {
           type="email"
           name="email"
           placeholder="Email ID"
+          value={formData.email}
           required
           onChange={handleChange}
         />
@@ -166,6 +158,7 @@ function RegisterForm() {
           type="tel"
           name="mobile"
           placeholder="Mobile Number"
+          value={formData.mobile}
           required
           onChange={handleChange}
         />
@@ -174,12 +167,45 @@ function RegisterForm() {
           type="text"
           name="city"
           placeholder="City"
+          value={formData.city}
           required
           onChange={handleChange}
         />
 
-        <button type="submit" className="hero-button" disabled={loading}>
-          {loading ? "Processing..." : "Pay ₹99 & Register"}
+        {/* BATCH SELECTION */}
+
+        <fieldset className="batch-selection">
+          <legend>Select Your Batch</legend>
+
+          <label className="batch-option">
+            <input
+              type="radio"
+              name="batchType"
+              value="Children's Batch"
+              checked={formData.batchType === "Children's Batch"}
+              onChange={handleChange}
+            />
+            <span>Children's Batch</span>
+          </label>
+
+          <label className="batch-option">
+            <input
+              type="radio"
+              name="batchType"
+              value="Adult Batch"
+              checked={formData.batchType === "Adult Batch"}
+              onChange={handleChange}
+            />
+            <span>Adult Batch</span>
+          </label>
+        </fieldset>
+
+        <button
+          type="submit"
+          className="hero-button"
+          disabled={loading}
+        >
+          {loading ? "Opening Payment..." : "Pay ₹99 & Register"}
         </button>
       </form>
     </section>

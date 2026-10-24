@@ -1514,6 +1514,54 @@ box-shadow:0 0 0 2px rgba(249,115,22,0.2);
 margin-top:10px;
 }
 
+
+/* BATCH SELECTION */
+
+.batch-selection {
+  border: 1px solid #e7d5c5;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 8px 0 20px;
+  text-align: left;
+}
+
+.batch-selection legend {
+  padding: 0 8px;
+  color: #7c2d12;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.batch-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  border: 1px solid #ead8c8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.batch-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #c2410c;
+  flex-shrink: 0;
+}
+
+.batch-option span {
+  color: #5b3a29;
+  font-size: 15px;
+}
+
+.batch-option:has(input:checked) {
+  background: #fff7ed;
+  border-color: #c2410c;
+}
+
+
 /* ===============================
    PAYMENT PAGE
 ================================ */
