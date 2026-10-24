@@ -5,11 +5,11 @@ function Bonuses() {
     <section className="bonuses">
       <h2 className="bonuses-title">Bonuses you will get</h2>
 
-      <div className="bonuses-grid">
+      {/* <div className="bonuses-grid">
         <div className="bonus-card">
           <img src="/bonus/workshop.png" alt="Recording" loading="lazy" />
           <h3>Workshop Recording</h3>
-        </div>
+        </div> */}
 
         <div className="bonus-card">
           <img src="/bonus/ebook.png" alt="Warli Ebook" loading="lazy" />
