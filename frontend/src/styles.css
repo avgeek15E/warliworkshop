@@ -1035,9 +1035,13 @@ button,
    BONUS SECTION
 ================================ */
 
+/* ===============================
+   BONUSES SECTION
+================================ */
+
 .bonuses {
   text-align: center;
-  padding: 20px 20px;
+  padding: 30px 20px;
 }
 
 .bonuses-title {
@@ -1047,27 +1051,125 @@ button,
   margin-bottom: 36px;
 }
 
+/* CENTER THE TWO CARDS */
+
 .bonuses-grid {
-  max-width: 1100px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto 40px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 28px;
 }
+
+/* BONUS CARD */
 
 .bonus-card {
-  background: linear-gradient(135deg,#fff7ed,#fde68a);
+  flex: 0 1 300px;
+  width: 100%;
+  max-width: 340px;
+
+  background: linear-gradient(135deg, #fff7ed, #fde68a);
   padding: 28px 24px;
   border-radius: 20px;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.bonus-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
+}
+
+/* BONUS IMAGES */
+
 .bonus-card img {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+
+  display: block;
+  margin-bottom: 18px;
+
   border-radius: 14px;
   border: 3px solid #fed7aa;
+}
+
+/* CARD HEADING */
+
+.bonus-card h3 {
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #7c2d12;
+  margin: 0;
+}
+
+/* ===============================
+   TABLET
+================================ */
+
+@media (max-width: 768px) {
+  .bonuses {
+    padding: 25px 16px;
+  }
+
+  .bonuses-title {
+    font-size: 32px;
+    margin-bottom: 28px;
+  }
+
+  .bonuses-grid {
+    gap: 20px;
+  }
+
+  .bonus-card {
+    flex-basis: 260px;
+    padding: 24px 18px;
+  }
+
+  .bonus-card img {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+/* ===============================
+   MOBILE
+================================ */
+
+@media (max-width: 480px) {
+  .bonuses-title {
+    font-size: 28px;
+  }
+
+  .bonuses-grid {
+    gap: 18px;
+  }
+
+  .bonus-card {
+    flex: 0 1 100%;
+    max-width: 320px;
+    padding: 24px 18px;
+  }
+
+  .bonus-card img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .bonus-card h3 {
+    font-size: 18px;
+  }
 }
 
 /* ===============================
