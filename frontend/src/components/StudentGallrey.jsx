@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 function StudentGallery() {
@@ -12,10 +13,10 @@ function StudentGallery() {
     "/students/6.webp",
     "/students/7.webp",
     "/students/8.webp",
-    "/students/9.webp"
+    "/students/9.webp",
   ];
 
-  /* duplicate images for infinite effect */
+  // Duplicate images for seamless infinite scrolling
   const infinitePaintings = [...paintings, ...paintings];
 
   return (
@@ -26,11 +27,20 @@ function StudentGallery() {
         className="gallery-wrapper"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
+        onTouchStart={() => setPaused(true)}
+        onTouchEnd={() => setPaused(false)}
+        onTouchCancel={() => setPaused(false)}
       >
-        <div className={`gallery-track ${paused ? "paused" : ""}`}>
+        <div
+          className={`gallery-track ${paused ? "paused" : ""}`}
+        >
           {infinitePaintings.map((img, index) => (
             <div className="gallery-card" key={index}>
-              <img src={img} alt="Student artwork" />
+              <img
+                src={img}
+                alt={`Student artwork ${(index % paintings.length) + 1}`}
+                draggable="false"
+              />
             </div>
           ))}
         </div>
