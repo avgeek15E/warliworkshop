@@ -174,7 +174,7 @@ function RegisterForm() {
 
         {/* BATCH SELECTION */}
 
-        <fieldset className="batch-selection">
+        {/* <fieldset className="batch-selection">
           <legend>Select Your Batch</legend>
 
           <label className="batch-option">
@@ -198,7 +198,7 @@ function RegisterForm() {
             />
             <span>Adult Batch</span>
           </label>
-        </fieldset>
+        </fieldset> */}
 
         <button
           type="submit"

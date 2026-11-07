@@ -33,8 +33,8 @@ function Hero() {
 
           <div className="hero-info-card">
             <p className="card-label">🎨 Adult Batch</p>
-            <p className="card-value">15th November 2026</p>
-            <p className="card-time">3 PM to 6 PM</p>
+            <p className="card-value">Coming Soon</p>
+            <p className="card-time">--</p>
           </div>
 
           <div className="hero-info-card highlight-card">
